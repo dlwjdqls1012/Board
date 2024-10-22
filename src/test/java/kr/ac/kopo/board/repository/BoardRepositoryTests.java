@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -26,13 +25,12 @@ public class BoardRepositoryTests {
     public void insertBoard(){
         IntStream.rangeClosed(1, 100).forEach(i ->{
             Member member = Member.builder()
-                    .email("user" + i + "@kopo.ac.kr")
-                    .name("user" + i)
+                    .email("user"+i+"@kopo.ac.kr")
                     .build();
 
             Board board = Board.builder()
-                    .title("Title " + i)
-                    .content("Content " + i)
+                    .title("Title  " + i)
+                    .content("Content "+ i)
                     .writer(member)
                     .build();
 
@@ -42,7 +40,7 @@ public class BoardRepositoryTests {
 
     @Transactional
     @Test
-    public  void testRead(){
+    public void testRead(){
         Optional<Board> result = boardRepository.findById(5L);
         Board board = result.get();
 
@@ -58,16 +56,17 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public void testReadWithReply(){
-        List<Object[]> result = boardRepository.getBoardWithWriter(77L);
+    public void testReadWithReply() {
+
+        List<Object[]> result = boardRepository.getBoardWithReply(77L);
         for (Object[] arr: result){
             System.out.println(Arrays.toString(arr));
         }
     }
 
     @Test
-    public void testBoardWithReplyCount(){
-        Pageable pageable = (Pageable) PageRequest.of(0, 19, Sort.by("bno").descending());
+    public void testWithReplyCount(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
         Page<Object[]> result = boardRepository.getBoardWithReplyCount(pageable);
 
         result.get().forEach(row ->{
@@ -77,9 +76,21 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public void restRead3(){
+    public void testRead3(){
         Object result = boardRepository.getBoardByBno(99L);
         Object[] arr = (Object[]) result;
         System.out.println(Arrays.toString(arr));
     }
+
+    @Test
+    public void testSearch1(){
+        boardRepository.search1();
+    }
+
+    @Test
+    public void testSearchPage(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending().and(Sort.by("title").ascending()));
+        boardRepository.searchPage("t", "1", pageable);
+    }
+
 }

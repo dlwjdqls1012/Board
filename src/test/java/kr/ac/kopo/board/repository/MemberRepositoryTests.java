@@ -16,12 +16,11 @@ public class MemberRepositoryTests {
     public void insertMembers(){
         IntStream.rangeClosed(1, 100).forEach(i ->{
             Member member = Member.builder()
-                    .email("user" + i + "@kopo.ac.kr")
+                    .email("user"+i+"@kopo.ac.kr")
                     .password("1234")
-                    .name("user" + i)
+                    .name("user"+i)
                     .build();
             memberRepository.save(member);
         });
     }
-
 }

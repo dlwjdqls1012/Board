@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @ToString(exclude = "board")
 public class Reply extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rno;
@@ -19,5 +20,5 @@ public class Reply extends BaseEntity{
     private String replyer;
 
     @ManyToOne
-    private Board board;
+    private Board board;//Foreign Key  설정(참조무결성 유지)
 }
